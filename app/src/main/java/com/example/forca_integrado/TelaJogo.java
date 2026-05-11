@@ -52,9 +52,6 @@ public class TelaJogo extends AppCompatActivity implements View.OnClickListener 
         listaImagens.add(R.drawable.forca_10_9);
         listaImagens.add(R.drawable.forca_11_9);
 
-        b1 = findViewById(R.id.id1);
-        b1.setOnClickListener(this);
-
         listaPalavras =  new ArrayList<String>();
         listaPalavras.add("CAIXA");
         listaPalavras.add("BOLA");
@@ -104,18 +101,33 @@ public class TelaJogo extends AppCompatActivity implements View.OnClickListener 
             Button b = findViewById(listaIdsButtons.get(j));
             b.setOnClickListener(this);
         }
-
-
+        inicializaJogo();
 
     }
     public void inicializaJogo(){
         imagem.setImageResource(R.drawable.forca_0_9);
+        indiceListaImagens = 0;
         palavra = sorteiaPalavra();
         estado = new char[palavra.length()];
         for(int i =0; i<estado.length;i++){
             estado[i] = '_';
         }
         atualizaTexto();
+    }
+    public void verificaLetra(char c){
+        boolean status = false;
+        for(int i=0; i<palavra.length();i++){
+            if(palavra.charAt(i)==c){
+                status = true;
+                estado[i] = c;
+            }
+        }
+        if(!status){
+            atualizaForca();
+        }
+        else {
+            atualizaTexto();
+        }
 
     }
     public void atualizaTexto(){
@@ -140,6 +152,8 @@ public class TelaJogo extends AppCompatActivity implements View.OnClickListener 
     @Override
     public void onClick(View view) {
        Button b = (Button) view;
-       texto.setText(b.getText().toString());
+       verificaLetra(b.getText().toString().charAt(0));
+       b.setEnabled(false);
+
     }
 }
